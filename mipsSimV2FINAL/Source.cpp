@@ -202,7 +202,7 @@ int main()
 	int addr = 96;
 	//int FD = open(argv[2] , O_RDONLY);
 	int FD = _open("t1.bin", O_RDONLY);
-	printf("filename: %s", "test1.bin\n");
+	printf("filename: %s", "t1.bin\n");
 	int amt = 4;
 	while (amt != 0)
 	{
@@ -269,7 +269,39 @@ int main()
 		}
 
 		void IF() {
-		
+			for( int i = 0; i <2 ; i++) {
+				
+				// chekc if room in preissue
+				if( preIssue[3] != 0 )
+					break;
+				// is it J,JR,NOP,BLTZ, BREAK
+				//Is it J?(Jump)
+				else if () {
+
+				}
+				//Is it JR?
+				/*else if () {
+				}*/
+				//Is it NOP?
+				/*else if () {
+				}*/
+				//Is it BLTZ?
+				/*else if () {
+				}*/
+				//Is it BREAK
+				else if () {
+				}
+				for (int j = 5; j > 0; j++) {
+					if (preIssue[j - 1] == 0) {
+						preIssue[j - 1] = j;
+						break;
+					}
+				}
+				
+				// find an open spot in preIssueBuffer
+				// copy the instruction to that spot 
+				PC +=4;
+			}	
 		}
 		void MEMU() {
 
@@ -306,19 +338,19 @@ int main()
 		//state.ALU();
 		//state.MEM();
 		//state.ISSUE();
-		//state.IF();
+		state.IF();
 		
-		instruction I = MEM[state.PC];
-		while( I.v == 0 ){
-			state.PC += 4;
-			I = MEM[ state.PC ];
-		}
-		state.PC += 4;
+		state.cycle ++;
+		if (state.PC == breakAddr + 4) break;
+		//instruction I = MEM[state.PC];
+		//while( I.v == 0 ){
+		//	state.PC += 4;
+		//	I = MEM[ state.PC ];
+		//}
+		//state.PC += 4;
 		/*nextpc = pc;
 
 		cout << printstate(  r, pc-4,  cycle, mem,  breakaddr,  lastaddr ) << endl;*/
-		state.cycle ++;
-		if (state.PC == breakAddr + 4) break;
 		//state.PC = nextpc;
 		//if( cycle >= 145) break;
 		
