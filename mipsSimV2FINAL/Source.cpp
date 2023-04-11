@@ -1,9 +1,9 @@
-#include <iomanip>
+#define _CRT_SECURE_NO_WARNINGS
 #include <unordered_map>
 #include <bitset>
 #include <iostream>
-#define _CRT_SECURE_NO_WARNINGS
 //#include <unistd.h>
+#include <sstream>
 #include <io.h>
 #include <fcntl.h>
 #include <iomanip>
@@ -52,13 +52,13 @@ struct instruction {
 			}
 			else if (ui == 2147483648) {
 				stringstream ss;
-				//ss << "NOP";
+				ss << "NOP";
 				out = out + ss.str();
 				istr = ss.str();
 			}
 			else if (opcode == 40) {
 				stringstream ss;
-				//ss << "ADDI\tR" << rt << ", R" << rs << ", #" << imm;
+				ss << "ADDI\tR" << rt << ", R" << rs << ", #" << imm;
 				out = out + ss.str();
 				istr = ss.str();
 				dest = rt;
@@ -94,55 +94,55 @@ struct instruction {
 			}
 			else if (opcode == 32 && func == 0) {
 				stringstream ss;
-				//ss << "SLL\tR" << rd << ", R" << rt << ", #" << shamt;
+				ss << "SLL\tR" << rd << ", R" << rt << ", #" << shamt;
 				out = out + ss.str();
 				istr = ss.str();
 			}
 			else if (opcode == 32 && func == 2) {
 				stringstream ss;
-				//ss << "SRL\tR" << rd << ", R" << rt << ", #" << shamt;
+				ss << "SRL\tR" << rd << ", R" << rt << ", #" << shamt;
 				out = out + ss.str();
 				istr = ss.str();
 			}
 			else if (opcode == 32 && func == 34) {
 				stringstream ss;
-				//ss << "SUB\tR" << rd << ", R" << rs << ", R" << rt;
+				ss << "SUB\tR" << rd << ", R" << rs << ", R" << rt;
 				out = out + ss.str();
 				istr = ss.str();
 			}
 			else if (opcode == 32 && func == 32) {
 				stringstream ss;
-				//ss << "ADD\tR" << rd << ", R" << rs << ", R" << rt;
+				ss << "ADD\tR" << rd << ", R" << rs << ", R" << rt;
 				out = out + ss.str();
 				istr = ss.str();
 			}
 			else if (opcode == 32 && func == 10) {
 				stringstream ss;
-				//ss << "MOVZ\tR" << rd << ", R" << rs << ", R" << rt;
+				ss << "MOVZ\tR" << rd << ", R" << rs << ", R" << rt;
 				out = out + ss.str();
 				istr = ss.str();
 			}
 			else if (opcode == 60 && func == 2) {
 				stringstream ss;
-				//ss << "MUL\tR" << rd << ", R" << rs << ", R" << rt;
+			    ss << "MUL\tR" << rd << ", R" << rs << ", R" << rt;
 				out = out + ss.str();
 				istr = ss.str();
 			}
 			else if (opcode == 32 && func == 8) {
 				stringstream ss;
-				//ss << "JR\tR" << rs;
+				ss << "JR\tR" << rs;
 				out = out + ss.str();
 				istr = ss.str();
 			}
 			else if (opcode == 34) {
 				stringstream ss;
-				//ss << "J\t#" << jTarget;
+				ss << "J\t#" << jTarget;
 				out = out + ss.str();
 				istr = ss.str();
 			}
 			else if (opcode == 32 && func == 13) {
 				stringstream ss;
-				//ss << "BREAK";
+				ss << "BREAK";
 				istr = ss.str();
 				out = out + ss.str();
 				isBreak = true;
@@ -188,7 +188,8 @@ string printState(const int R[], const int PC, const int cycle, unordered_map< i
 
 }
 
-int main(int argc, char* argv[])
+//int main(int argc, char* argv[])
+int main()
 {
 	unordered_map< int, instruction> MEM;
 	bool doneBreak = false;
@@ -200,8 +201,8 @@ int main(int argc, char* argv[])
 	iPtr = (char*)(void*)&i;
 	int addr = 96;
 	//int FD = open(argv[2] , O_RDONLY);
-	int FD = _open(argv[2], O_RDONLY);
-	printf("filename: %s", argv[2]);
+	int FD = _open("t1.bin", O_RDONLY);
+	printf("filename: %s", "test1.bin\n");
 	int amt = 4;
 	while (amt != 0)
 	{
@@ -237,6 +238,7 @@ int main(int argc, char* argv[])
 		int preIssue[4] = { 0 };
 		int preALU[2] = { 0 };
 		int preMEM[2] = { 0 };
+		
 		struct postThings {
 			int instr = 0, value = 0;
 		};
@@ -257,95 +259,69 @@ int main(int argc, char* argv[])
 		}
 		void WB() {
 			if (postMEM.instr != 0) {
-				R[MEM[postMEM[instr]].dest] = postMEM.value;
+				//R[MEM[postMEM[instr]].dest] = postMEM.value;
 				postMEM = postThings();
 			}
 			if (postALU.instr != 0) {
-				R[MEM[postALU[instr]].dest] = postALU.value;
+				//R[MEM[postALU[instr]].dest] = postALU.value;
 				postALU = postThings();
 			}
 		}
+
+		void IF() {
+		
+		}
+		void MEMU() {
+
+		}
+
+		void ISSUE() {
+
+		}
 	};
+	//Instruction = opcode + 32, fcode, what chips get used.
+	//	NOP = 0                    Only use IF
+	//	SLL = 32, 0                ALU Pipeline, IF, Issue, ALU, WB
+	//	SRL = 32, 2                ALU Pipeline, IF, Issue, ALU, WB
+	//	JR = 32, 8                Only use IF
+	//	MOVZ = 32, 10            ALU Pipeline, IF, Issue, ALU, WB
+	//	BREAK = 32, 13            Only use IF
+	//	MUL = 32, 24            ALU Pipeline, IF, Issue, ALU, WB
+	//	ADD = 32, 32            ALU Pipeline, IF, Issue, ALU, WB
+	//	SUB = 32, 34            ALU Pipeline, IF, Issue, ALU, WB
+	//	AND = 32, 36            ALU Pipeline, IF, Issue, ALU, WB
+	//	OR = 32, 37                ALU Pipeline, IF, Issue, ALU, WB
+	//	BLTZ = 33                Only use IF
+	//	J = 34                    Only use IF
+	//	LW = 35                    MEM Pipeline, IF, Issue, MEM, WB
+	//	BEQ = 36                Only use IF
+	//	ADDI = 40                ALU Pipeline, IF, Issue, ALU, WB
+	//	SW = 43                    MEM Pipeline, but does not go past MEM.Instead goes directly to Memory.
 	processorState state;
 	state.MEM = MEM;
+	//MEM[PC] = PC;
 	while (true) {
 
 		state.WB();
-		state.ALU();
-		state.MEM();
-		state.ISSUE();
-		state.IF();
-		/*
-		instruction I = MEM[ PC ];
+		//state.ALU();
+		//state.MEM();
+		//state.ISSUE();
+		//state.IF();
+		
+		instruction I = MEM[state.PC];
 		while( I.v == 0 ){
-			PC += 4;
-			I = MEM[ PC ];
+			state.PC += 4;
+			I = MEM[ state.PC ];
 		}
-		PC += 4;
-		nextpc = PC;
-		if( (unsigned int) I.intVal == 2147483648 ){ //NOP
-		}
-		else if( I.opcode == 40 ){ //ADDI
-			R[ I.rt ] = R[ I.rs] + I.imm;
-		}
-		else if( I.opcode == 43 ){ //SW
-			//ss << "SW\tR" << rt << ", " <<imm << "(R" << rs << ")";
-			MEM[ R[I.rs] + I.imm ].intVal = R[ I.rt ];
-		}
-		else if( I.opcode == 35 ){
-			//ss << "LW\tR" << rt << ", " <<imm << "(R" << rs << ")";
-			R[I.rt] = MEM[ I.imm + R[I.rs]].intVal;
-		}
-		else if( I.opcode == 33 ){
-			//ss << "BLTZ\tR" << rs << ", #" <<target;
-			if (R[I.rs] < 0	)
-				nextpc = PC + I.target;
-		}
-		else if( I.opcode == 32 && I.func == 0 ){
-			//ss << "SLL\tR" << rd << ", R" << rt << ", #" << shamt;
-			R[I.rd] = R[I.rt] << I.shamt;
-		}
-		else if( I.opcode == 32 && I.func == 2 ){
-			//ss << "SRL\tR" << rd << ", R" << rt << ", #" << shamt;
-		}
-		else if( I.opcode == 32 && I.func == 34 ){
-			//1ss << "SUB\tR" << rd << ", R" << rs << ", R" << rt;
-			R[I.rd] = R[I.rs] - R[I.rt];
-		}
-		else if( I.opcode == 32 && I.func == 32 ){
-			//ss << "ADD\tR" << rd << ", R" << rs << ", R" << rt;
-			R[I.rd] = R[I.rs] + R[I.rt];
-		}
-		else if( I.opcode == 32 && I.func == 10 ){
-			//ss << "MOVZ\tR" << rd << ", R" << rs << ", R" << rt;
-		}
-		else if( I.opcode == 60 && I.func == 2 ){
-			//ss << "MUL\tR" << rd << ", R" << rs << ", R" << rt;
-		}
-		else if( I.opcode == 32 && I.func == 8 ){
-			//ss << "JR\tR" << rs;
-		}
-		else if( I.opcode == 34){
-			//ss << "J\t#" << jTarget;
-			nextpc = I.jTarget;
+		state.PC += 4;
+		/*nextpc = pc;
 
-		}
-		else if( I.opcode == 32 && I.func == 13 ){
-			//ss << "BREAK";
-		//	isBreak = true;
-		}
-		else {
-			printf ("Opcode %i func %i not implemented\n", I.opcode, I.func);
-			I.print();
-			exit(0);
-		}
-
-		cout << printState(  R, PC-4,  cycle, MEM,  breakAddr,  lastAddr ) << endl;
-		cycle ++;
-		if (PC == breakAddr + 4) break;
-		PC = nextpc;
+		cout << printstate(  r, pc-4,  cycle, mem,  breakaddr,  lastaddr ) << endl;*/
+		state.cycle ++;
+		if (state.PC == breakAddr + 4) break;
+		//state.PC = nextpc;
 		//if( cycle >= 145) break;
-		*/
+		
 	}
 
 }

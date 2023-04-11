@@ -24,4 +24,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\Downloads\t3.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Downloads\t2.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Downloads\t1.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Downloads\t4.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\t1.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\t2.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\t3.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\t4.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
