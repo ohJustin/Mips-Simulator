@@ -270,36 +270,48 @@ int main()
 
 		void IF() {
 			for( int i = 0; i <2 ; i++) {
-				
+				instruction I = MEM[PC];
+				//unsigned int ui = (unsigned int)instruction.i;
 				// chekc if room in preissue
-				if( preIssue[3] != 0 )
+				if (preIssue[3] != 0){
 					break;
+				}
 				// is it J,JR,NOP,BLTZ, BREAK
-				//Is it J?(Jump)
-				else if () {
+				//Is it J?(Jump)(opcode == 34)
+				else if (I.opcode == 34) {
+					break;
+				}
+				//Is it JR?(opcode == 32 && func == 8)
+				else if (I.opcode == 32 && I.func == 8) {
+					break;
+				}
+				//Is it NOP?(ui == 2147483648)
+				/*else if () {
+				*
+				}*/
+				//Is it BLTZ?(opcode == 33)
+				else if (I.opcode == 33) {
+					break;
+				}
+				//Is it BREAK(opcode == 32 && func == 13)
+				else if (I.opcode == 32 && I.func == 13) {
+					break;
+				}
 
-				}
-				//Is it JR?
-				/*else if () {
-				}*/
-				//Is it NOP?
-				/*else if () {
-				}*/
-				//Is it BLTZ?
-				/*else if () {
-				}*/
-				//Is it BREAK
-				else if () {
-				}
-				for (int j = 5; j > 0; j++) {
+				for (int j = 5; j > 0; j--) {
 					if (preIssue[j - 1] == 0) {
-						preIssue[j - 1] = j;
+						//preIssue[j - 1] = MEM[PC];
 						break;
 					}
 				}
 				
 				// find an open spot in preIssueBuffer
 				// copy the instruction to that spot 
+				for (i = 0; i < 4; i++) {
+					if (preIssue[i] == 0) {
+						preIssue[i] = I.intVal; //How?
+					}
+				}
 				PC +=4;
 			}	
 		}
@@ -308,7 +320,10 @@ int main()
 		}
 
 		void ISSUE() {
+			for (int i = 0; i < 4; i++) {
+				//When an instruction is issued, it moves out of the pre - issue buffer and into either the pre - mem buffer or the pre - ALU buffer.
 
+			}
 		}
 	};
 	//Instruction = opcode + 32, fcode, what chips get used.
@@ -342,17 +357,19 @@ int main()
 		
 		state.cycle ++;
 		if (state.PC == breakAddr + 4) break;
-		//instruction I = MEM[state.PC];
-		//while( I.v == 0 ){
-		//	state.PC += 4;
-		//	I = MEM[ state.PC ];
-		//}
-		//state.PC += 4;
-		/*nextpc = pc;
+		instruction I = MEM[state.PC];
+		while( I.v == 0 ){
+			state.PC += 4;
+			I = MEM[ state.PC ];
+		}
+		state.PC += 4;
+		int nextpc = state.PC;
 
-		cout << printstate(  r, pc-4,  cycle, mem,  breakaddr,  lastaddr ) << endl;*/
-		//state.PC = nextpc;
-		//if( cycle >= 145) break;
+		cout << printState(state.R, state.PC - 4, state.cycle, state.MEM, breakAddr, lastAddr);
+		cout << endl;
+		state.PC = nextpc;
+		if( state.cycle >= 10) break;
+		//if(state)
 		
 	}
 
